@@ -1,0 +1,213 @@
+{
+  "info": {
+    "name": "AI Recipe Planner - Weeks 1-3",
+    "_postman_id": "f12e06c6-89c3-4b46-8d28-4a87ed056413",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"john\", \"email\": \"john@example.com\", \"password\": \"Password123\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Login (saves token)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let res = pm.response.json();",
+              "if (res.token) {",
+              "  pm.environment.set('authToken', res.token);",
+              "  console.log('Saved token to env');",
+              "} else {",
+              "  console.log('No token in response');",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"john@example.com\", \"password\": \"Password123\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Profile (protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/profile",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "profile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ingredients - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"chicken breast\", \"quantity\": \"2\", \"unit\": \"pieces\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ingredients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ingredients"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ingredients - List",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ingredients",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ingredients"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Recipes - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"Garlic Chicken\", \"ingredients\": [{\"name\": \"chicken breast\", \"quantity\": \"2\", \"unit\": \"pieces\"}], \"instructions\": \"1) season 2) bake 3) rest\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/recipes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "recipes"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Recipes - List",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/recipes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "recipes"
+          ]
+        }
+      }
+    }
+  ]
+}
